@@ -396,6 +396,24 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+# init tables
+with get_db() as db:
+    # Tabel students
+    db.execute('''CREATE TABLE IF NOT EXISTS students (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE
+    )''')
+
+    # Tabel images
+    db.execute('''CREATE TABLE IF NOT EXISTS images (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER NOT NULL,
+        path TEXT NOT NULL,
+        FOREIGN KEY(student_id) REFERENCES students(id)
+    )''')
+
+    db.commit()
+
 @app.post('/students')
 def create_student():
     name = request.json.get('name')

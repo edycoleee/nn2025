@@ -6,14 +6,20 @@ function App() {
   const [status, setStatus] = useState("Checking...");
 
   const [name, setName] = useState('');
-  const [file, setFile] = useState(null);
+  const [studentId, setStudentId] = useState(null);
+  const [files, setFiles] = useState([]);
 
-  const handleUpload = async () => {
+  const createStudent = async () => {
+    const { data } = await axios.post('http://localhost:5000/students', { name });
+    setStudentId(data.id);
+    alert(`Siswa dibuat: ${data.name} (id=${data.id})`);
+  };
+
+  const uploadImages = async () => {
     const form = new FormData();
-    form.append('name', name);
-    form.append('file', file);
-    const { data } = await axios.post('http://localhost:5000/upload', form);
-    alert(`Siswa tersimpan: ${data.name}, id=${data.id}`);
+    for (const f of files) form.append('files', f);
+    const { data } = await axios.post(`http://localhost:5000/upload/${studentId}`, form);
+    alert(`Upload sukses: ${data.saved.length} gambar`);
   };
 
   useEffect(() => {
@@ -33,21 +39,22 @@ function App() {
     <div>
       <h1>Face Recognition</h1>
       <p>Server status: {status}</p>
-          <div style={{ padding: 20 }}>
-      <h2>Upload Data Siswa</h2>
+      <div style={{ padding: 20 }}>
+      <h2>Upload Banyak Gambar Siswa</h2>
       <input 
         type="text" 
         placeholder="Nama siswa" 
         value={name} 
         onChange={e => setName(e.target.value)} 
       />
-      <br/><br/>
+      <button onClick={createStudent}>Buat Siswa</button>
+      <hr/>
       <input 
         type="file" 
-        onChange={e => setFile(e.target.files[0])} 
+        multiple 
+        onChange={e => setFiles([...e.target.files])} 
       />
-      <br/><br/>
-      <button onClick={handleUpload}>Upload</button>
+      <button onClick={uploadImages} disabled={!studentId}>Upload ≥5 Gambar</button>
     </div>
     </div>
   );
