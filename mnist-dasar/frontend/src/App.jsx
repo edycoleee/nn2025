@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import UploadForm from "./components/UploadForm";
+import Canvas from "./components/Canvas";
 import { testConnection } from "./api";
 
 function App() {
@@ -20,9 +20,9 @@ function App() {
 
   return (
     <div>
-      <h1>CIFAR Image Prediction</h1>
+      <h1>MNIST Digit Recognition</h1>
       <p>Server status: {status}</p>
-      <UploadForm />
+      <Canvas />
     </div>
   );
 }
