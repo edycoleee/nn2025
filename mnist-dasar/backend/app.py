@@ -8,6 +8,21 @@ CORS(app)
 
 model = load_model("model/mnist_cnn.h5")
 
+# @app.route("/predict", methods=["POST"])
+# def predict():
+#     if "file" not in request.files:
+#         return jsonify({"error": "No file uploaded"}), 400
+    
+#     file = request.files["file"]
+#     img_bytes = file.read()
+#     processed = preprocess_image(img_bytes)
+    
+#     preds = model.predict(processed)
+#     class_id = int(preds.argmax())
+#     confidence = float(preds.max())
+    
+#     return jsonify({"digit": class_id, "confidence": confidence})
+
 @app.route("/predict", methods=["POST"])
 def predict():
     if "file" not in request.files:
@@ -17,11 +32,15 @@ def predict():
     img_bytes = file.read()
     processed = preprocess_image(img_bytes)
     
-    preds = model.predict(processed)
+    preds = model.predict(processed)[0]  # array panjang 10
     class_id = int(preds.argmax())
     confidence = float(preds.max())
     
-    return jsonify({"digit": class_id, "confidence": confidence})
+    return jsonify({
+        "digit": class_id,
+        "confidence": confidence,
+        "probabilities": preds.tolist()  # kirim semua kelas
+    })
 
 @app.route("/ping", methods=["GET"])
 def ping():

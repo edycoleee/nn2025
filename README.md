@@ -147,3 +147,48 @@ print(c)
 ### CIFAR
 
 ### MNIST
+
+CNN MNIST + Flask API + React Vite dengan Canvas. Jadi user bisa menggambar angka di canvas frontend, kirim ke backend Flask, lalu CNN model prediksi angka (0–9)
+
+```
+mnist-project/
+│
+├── backend/
+│   ├── app.py                # Flask API
+│   ├── model/
+│   │   └── mnist_cnn.h5      # Model CNN tersimpan
+│   ├── utils/
+│   │   └── preprocess.py     # Preprocessing gambar canvas
+│   ├── requirements.txt
+│   └── uploads/              # (opsional) simpan gambar
+│
+├── frontend/
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   └── src/
+│       ├── App.jsx
+│       ├── api.js
+│       └── components/
+│           └── Canvas.jsx    # Komponen untuk menggambar angka
+│
+└── README.md
+```
+
+- Alur 1
+
+User menggambar angka di canvas.
+
+Canvas diubah jadi PNG blob → dikirim ke Flask API.
+
+Flask preprocess → CNN prediksi angka.
+
+Frontend tampilkan hasil prediksi + confidence.
+
+- Alur 2
+
+Backend kirim semua probabilitas kelas digit.
+
+Frontend tampilkan list prosentase atau bar chart.
+
+User bisa lihat distribusi prediksi, bukan hanya hasil tertinggi.
