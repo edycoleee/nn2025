@@ -143,3 +143,7 @@ with tf.device('/GPU:0'):
 
 print(c)
 ```
+
+### CIFAR
+
+### MNIST
