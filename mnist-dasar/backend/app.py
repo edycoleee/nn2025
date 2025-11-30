@@ -1,11 +1,13 @@
 # backend/app.py
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from tensorflow.keras.models import load_model
 import numpy as np
 from PIL import Image
 import io
 
 app = Flask(__name__)
+CORS(app)  # Izinkan semua origin (bisa dibatasi nanti)
 
 # Load model CIFAR
 model = load_model("model/cifar_model.h5")
@@ -34,6 +36,10 @@ def predict():
         "class": class_names[class_id],
         "confidence": confidence
     })
+
+@app.route("/ping", methods=["GET"])
+def ping():
+    return jsonify({"message": "Flask API is alive!"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
