@@ -60,6 +60,29 @@ pip install tensorflow==2.13.0
 python3 -c "import tensorflow as tf; print(tf.__version__)"
 ```
 
+Install REACT VITE
+
+- 🔹Pakai nvm (Node Version Manager)
+- Node 18 tetap ada, tapi kamu bisa switch ke Node 20 atau 22 saat butuh.
+
+```bash
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+
+# Install Node.js versi 20 LTS
+nvm install 20
+nvm use 20
+
+# Cek versi aktif
+node -v
+
+#Kalau mau default ke Node 20:
+nvm alias default 20
+
+```
+
+
 # GPU RTX 2060 Anda di laptop Asus ROG
 
 install python versi 3.10
@@ -144,57 +167,19 @@ with tf.device('/GPU:0'):
 print(c)
 ```
 
-### CIFAR
+# CIFAR
 
 Dataset CIFAR adalah kumpulan gambar berwarna berukuran 32x32 piksel yang umum digunakan untuk melatih model deep learning klasifikasi gambar. Versi yang paling populer adalah CIFAR-10, yang berisi 60.000 gambar dalam 10 kelas objek yang berbeda (pesawat, mobil, burung, kucing, rusa, anjing, katak, kuda, kapal, dan truk). Versi lain, CIFAR-100, memiliki 100 kelas objek. 
 
-Install REACT VITE
+proyek end-to-end: Flask API untuk model CIFAR (misalnya CNN yang sudah dilatih), lalu frontend React + Vite untuk upload gambar dan menampilkan hasil prediksi.
 
-- 🔹Pakai nvm (Node Version Manager)
-- Node 18 tetap ada, tapi kamu bisa switch ke Node 20 atau 22 saat butuh.
+🔗 Alur Kerja
 
-```bash
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-source ~/.bashrc
+Frontend: User upload gambar → dikirim ke Flask API via fetch.
 
-# Install Node.js versi 20 LTS
-nvm install 20
-nvm use 20
+Backend: Flask menerima file → preprocess → model prediksi → kirim JSON hasil.
 
-# Cek versi aktif
-node -v
-
-#Kalau mau default ke Node 20:
-nvm alias default 20
-
-```
-
-- Step-by-step React + Vite sederhana
-
-Buat project baru dengan Vite
-
-```bash
-npm create vite@latest my-app
-```
-Pilih framework: React
-
-Pilih variant: JavaScript atau TypeScript sesuai kebutuhan.
-
-Masuk ke folder project
-```bash
-cd my-app
-```
-Install dependencies
-```bash
-npm install
-```
-Jalankan server development
-```bash
-npm run dev
-```
-Default akan jalan di http://localhost:5173
-
+Frontend: JSON ditampilkan ke user (class + confidence).
 
 - 📂 Struktur Project dengan Docker
 ```
@@ -214,3 +199,30 @@ cifar-project/
 │
 └── docker-compose.yml
 ```
+
+Cara Jalankan
+Dari root project (cifar-project/):
+
+```bash
+docker-compose up --build
+```
+Backend akan jalan di http://localhost:5000.
+
+Frontend akan jalan di http://localhost:5173.
+
+Frontend bisa akses backend via http://backend:5000 (jika mau pakai internal network), atau tetap http://localhost:5000.
+
+Kalau mau frontend akses backend via nama service (backend), edit src/api.js:
+
+```javascript
+const response = await fetch("http://backend:5000/predict", { ... });
+```
+karena Docker Compose bikin internal DNS otomatis.
+
+Untuk development, tetap bisa pakai localhost:5000.
+
+Catatan : 
+- Rasspberry pi >> docker tensorflow masih banyak bermasalah, jadi pakai langsung saja tanpa docker
+- Asus ROG VGA RTX >> menjalankan docker dari windows juga membuat sistem melambat
+- Proxmox VM >> Ubuntu >> docker tensorflow harus banyak yang di konfigurasi
+- Jadi untuk ML API lebih mudah belajar dengan tanpa docker dan tanpa VM, idealnya cpu dengan gpu RTX yang mumpuni
