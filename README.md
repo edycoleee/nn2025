@@ -602,13 +602,15 @@ export default function App() {
 🔧 Catatan penting
 Agar gambar bisa diakses dari frontend, tambahkan static file serving di Flask:
 
-python
+```python
 from flask import send_from_directory
 
 @app.get('/data/raw/<path:filename>')
 def serve_image(filename):
     return send_from_directory('data/raw', filename)
+```
 Pastikan path yang disimpan di DB sesuai dengan route static ini (misalnya hanya student_id/filename.jpg).
+
 
 ## Tahap 3: Training data & save model. Di tahap ini kita akan mengambil gambar-gambar siswa dari SQLite, melakukan preprocessing, melatih model sederhana dengan TensorFlow/Keras, lalu menyimpan model ke disk agar bisa dipakai untuk prediksi nanti.
 
