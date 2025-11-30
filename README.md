@@ -204,6 +204,9 @@ Buat tabel students dengan kolom id, name, image_path.
 
 Endpoint /upload menerima name + file gambar, lalu simpan ke folder data/raw.
 
+pip install flask-cors
+
+
 ```python
 # app.py
 import os, sqlite3
@@ -253,8 +256,8 @@ def upload_student():
 Setup project
 
 ```bash
-npm create vite@latest student-upload -- --template react
-cd student-upload
+npm create vite@latest frontend
+cd frontend
 npm install axios
 ```
 Form upload sederhana
@@ -316,6 +319,46 @@ Klik Upload → request POST ke Flask /upload.
 Flask simpan file ke data/raw/ dan metadata ke SQLite.
 
 Response JSON berisi id, name, image_path.
+=======================================
+📌 Apa itu from werkzeug.utils import secure_filename
+Werkzeug adalah library Python yang menjadi “toolkit” untuk web development, dan dipakai oleh Flask di belakang layar.
+
+Di dalam werkzeug.utils ada fungsi bernama secure_filename.
+
+Fungsi ini dipakai untuk membersihkan nama file upload agar aman disimpan di server.
+
+🔒 Kenapa perlu secure_filename?
+Saat user mengupload file, nama file bisa berisi:
+
+Spasi, karakter aneh (?, *, .., /)
+
+Path traversal (../../etc/passwd) → berbahaya!
+
+Unicode atau simbol yang tidak cocok untuk sistem file
+
+Jika langsung disimpan, bisa menimbulkan bug atau celah keamanan.
+
+⚙️ Cara kerja secure_filename
+Fungsi ini:
+
+Menghapus karakter berbahaya.
+
+Mengganti spasi dengan underscore _.
+
+Menjaga hanya huruf, angka, titik, dan garis bawah.
+
+Menghindari path traversal.
+
+Contoh:
+
+```python
+from werkzeug.utils import secure_filename
+
+filename = "my photo../evil.png"
+safe = secure_filename(filename)
+print(safe)   # hasil: "my_photo..evil.png"
+```
+👉 Jadi nama file yang tadinya berbahaya jadi aman untuk disimpan.
 
 
 ## Tahap 2: Upload banyak gambar per siswa (≥5). Tujuannya: setiap siswa bisa punya banyak gambar wajah (minimal 5) yang disimpan di backend, lalu frontend menyediakan form upload multi-file.

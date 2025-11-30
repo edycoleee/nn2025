@@ -1,27 +1,46 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from tensorflow.keras.models import load_model
-from utils.preprocess import preprocess_image
+import os, sqlite3
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)
 
-#model = load_model("model/mnist_cnn.h5")
+app.config['UPLOAD_FOLDER'] = 'data/raw'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    if "file" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
+def get_db():
+    conn = sqlite3.connect('students.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# init table
+with get_db() as db:
+    db.execute('''CREATE TABLE IF NOT EXISTS students (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        image_path TEXT NOT NULL
+    )''')
+    db.commit()
+
+@app.post('/upload')
+def upload_student():
+    name = request.form.get('name')
+    file = request.files.get('file')
+    if not name or not file:
+        return jsonify({'error':'name and file required'}), 400
     
-    file = request.files["file"]
-    img_bytes = file.read()
-    processed = preprocess_image(img_bytes)
-    
-    preds = model.predict(processed)
-    class_id = int(preds.argmax())
-    confidence = float(preds.max())
-    
-    return jsonify({"digit": class_id, "confidence": confidence})
+    filename = secure_filename(file.filename)
+    path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(path)
+
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('INSERT INTO students(name, image_path) VALUES (?,?)', (name, path))
+    db.commit()
+    sid = cur.lastrowid
+
+    return jsonify({'id': sid, 'name': name, 'image_path': path})
 
 @app.route("/ping", methods=["GET"])
 def ping():
