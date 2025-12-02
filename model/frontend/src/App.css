@@ -1,0 +1,258 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+h1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  margin: 0;
+  text-align: center;
+  font-size: 2.5em;
+}
+
+.dashboard {
+  display: flex;
+  min-height: 800px;
+}
+
+.panel {
+  padding: 30px;
+  flex: 1;
+}
+
+.left-panel {
+  background: #f8f9fa;
+  border-right: 2px solid #e9ecef;
+  max-width: 400px;
+}
+
+.middle-panel {
+  flex: 2;
+  background: white;
+}
+
+.add-class-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.add-class-form input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.add-class-form button {
+  padding: 12px 24px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-class-form button:hover {
+  background: #45a049;
+}
+
+.class-list {
+  margin-bottom: 40px;
+}
+
+.class-list h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.class-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.delete-btn {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ff3742;
+}
+
+.model-training {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.train-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 15px 0;
+}
+
+.train-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.model-list {
+  margin-top: 20px;
+}
+
+.model-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.model-accuracy {
+  color: #4CAF50;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.model-date {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.active-badge {
+  display: inline-block;
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.webcam-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.webcam-view {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.webcam-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.webcam-controls button {
+  padding: 12px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.webcam-controls button:hover:not(:disabled) {
+  background: #5a67d8;
+  transform: translateY(-2px);
+}
+
+.webcam-controls button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.class-select {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.predict-btn {
+  background: #4CAF50 !important;
+}
+
+.predict-btn:hover:not(:disabled) {
+  background: #45a049 !important;
+}
+
+.prediction-result {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.prediction-details {
+  font-size: 1.2em;
+  margin-top: 15px;
+}
+
+.prediction-details div {
+  margin: 10px 0;
+}
+
+@media (max-width: 1024px) {
+  .dashboard {
+    flex-direction: column;
+  }
+  
+  .left-panel {
+    max-width: none;
+    border-right: none;
+    border-bottom: 2px solid #e9ecef;
+  }
+}
